@@ -1,0 +1,238 @@
+﻿<!DOCTYPE html>
+<html>
+<head runat="server">
+    <title></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.2.4/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.2.4/firebase-firestore.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <!--<script src="JavaScript.js"></script>-->
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 8px;
+            border: 1px solid black
+        }
+
+        tr:nth-child(even) {
+            background-color: #D6EEEE;
+        }
+
+        .center {
+            margin: auto;
+            width: 60%;
+            border: 3px solid #73AD21;
+            padding: 10px;
+        }
+    </style>    
+</head>
+<body>
+    <div class="container pt-5 ">
+        
+            <div id="user" runat="server" style="margin: 25px">
+                <div class="row mb-3">
+                    <form class="col-md-12" style="text-align: center">
+                        <select id="vr_admin" onchange="toggleContent()">
+                            <option value="" disabled selected>Select an option</option>
+                            <option value="select_reg">Volunteer Registration</option>
+                            <option value="select_admin">Admin</option>
+                        </select>                       
+                    </form>
+                </div>
+            </div>
+            <!-- registration -->            
+            <form id="volun_reg_form" runat="server" class="center" onload="">
+                <h3 style="text-align: center">Volunteer Registration Form</h3>
+                <div class="row justify-content-center" style="margin-top: 5px">
+                    <div class="col-md-4 text-right">
+                        <label title="Name">Name</label>
+                    </div>
+                    <div class="col-md-4 text-left">
+                        <input id="Name" type="text" placeholder="Name" required>
+                    </div>
+                </div>
+                <div class="row justify-content-center" style="margin-top: 5px">
+                    <div class="col-md-4 text-right">
+                        <label title="Mobile"> Mobile</label>
+                    </div>
+                    <div class="col-md-4 text-left">
+                        <input id="Mobile" type="text" placeholder="Mobile Number"  maxlength="10" required>
+                    </div>
+                </div>
+                <div class="row justify-content-center" style="margin-top: 5px">
+                    <div class="col-md-4 text-right">
+                        <label title="Location"> Location</label>
+                    </div>
+                    <div class="col-md-4 text-left">
+                        <input id="Location" type="text" placeholder="Location" required>                        
+                    </div>
+                </div>
+                <div class="row justify-content-center" style="margin-top: 5px">
+                    <div class="col-md-4 text-right">
+                        <label title="Language">Spoken Languages</label>
+                    </div>
+                    <div class="col-md-4 text-left">
+                        <input id="Language" type="text"  placeholder="Ex: English and Tamil" required>
+                    </div>                    
+                </div>
+                <div class="row justify-content-center" style="margin-top: 5px">
+                    <div class="col-md-4 text-right">
+                        <label title="Days">Availability days</label>
+                    </div>
+                    <div class="col-md-4 text-left">
+                        <input id="Days" type="text" placeholder="Ex:Mon,Tue, and Thu" required>
+                    </div>
+                </div>
+                <div class="row mt-5" style="text-align:center;margin-top:5px">
+                    <div class="col-md-12">
+                    <input id="submit_msg" type="submit" onclick="validateMobileNumber()" value="Submit" class="btn btn-info" border="0" /></div>                                    
+                </div>
+            </form>
+           <!-- admin form -->
+            <form runat="server" id="admin" class="center" visible="false">
+                <div class="row justify-content-center" style="margin-top: 5px">
+                    <div class="col-md-4 text-right">
+                        <label title="username">User Name</label>
+                    </div>
+                    <div class="col-md-4 text-left">
+                        <input id="username" type="text" required placeholder="User Name" />
+                    </div>
+                </div>
+                <div class="row justify-content-center" style="margin-top: 5px">
+                    <div class="col-md-4 text-right">
+                        <label title="Password">Password</label>
+                    </div>
+                    <div class="col-md-4 text-left">
+                        <input id="password" type="text" required placeholder="Password" />
+                    </div>
+                </div>                
+                <div style="margin: 10px; text-align: center;">
+                    <input id="login" type="submit" value="Login" border="0" class="mt-5 btn btn-info" />
+                </div>
+            </form>
+            <div class="row" style="text-align:center; margin-top: 15px">
+                <div class="col-md-12">
+                    <table id="dataTable" border="1"></table>
+                </div>
+            </div> 
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $("#login").click(function () {
+                var username = document.getElementById("username").value;
+                var password = document.getElementById("password").value
+                // Replace these with your actual username and password
+                var validUsername = "user";
+                var validPassword = "pass";
+                if (username == validUsername && password == validPassword) {
+                    alert("login success.");
+                    var db1 = firebase.firestore();
+                    var dataTable = document.getElementById("dataTable");
+                    db1.collection("messages").get().then((querySnapshot) => {
+                        dataTable.innerHTML = "<tr><th>Name</th><th>Mobile Number</th><th>Location</th><th>Languages</th><th>Availablity Days</th></tr>"
+                        querySnapshot.forEach((doc) => {
+                            var item = doc.data();
+                            var row = "<tr><td>" + item.name + "</td><td>" + item.mobile + "</td><td>" + item.location + "</td><td>" + item.Language + "</td><td>" + item.Days + "</td></tr>";
+                            dataTable.innerHTML += row;
+                            console.log(item)                            
+                        });
+                    });
+                } else {
+                    alert("Invalid username or password. Please try again.");
+                }
+            });
+        });
+
+        window.onload = function () {
+            var form_reg = document.getElementById("volun_reg_form");
+            var form_admin = document.getElementById("admin");
+            var mainform = document.getElementById("vr_admin");
+            mainform.value == "";
+            form_reg.style.display = "none";
+            form_admin.style.display = "none";
+        };
+        function toggleContent() {            
+            var mainform = document.getElementById("vr_admin");
+            var form_reg = document.getElementById("volun_reg_form");
+            var form_admin = document.getElementById("admin");            
+            if (mainform.value === "select_reg") {
+                form_reg.style.display = "block";
+                form_admin.style.display = "none";                
+            } else if (mainform.value === "select_admin") {
+                form_reg.style.display = "none";
+                form_admin.style.display = "block";                
+            }
+        }
+
+
+        (function () {
+            /*'' here change ur keys*/
+            var firebaseConfig = {
+                apiKey: "AIzaSyCh-iPnIOKAL7gaFlWhM-QZGxyPZ7wPV1o",
+                authDomain: "loginreg-2f495.firebaseapp.com",
+                projectId: "loginreg-2f495",
+                storageBucket: "loginreg-2f495.appspot.com",
+                messagingSenderId: "364827938740",
+                appId: "1:364827938740:web:10c868fa19d04fd7f0ece1",
+                measurementId: "G-TNV0JXWS05"
+
+
+                //apiKey: "AIzaSyCriqnlFLoyXbiAHxqC2ZCVD8cxQbSPsfk",
+                //authDomain: "volunteer-registration-9f31f.firebaseapp.com",
+                //projectId: "volunteer-registration-9f31f",
+                //storageBucket: "volunteer-registration-9f31f.appspot.com",
+                //messagingSenderId: "121798327522",
+                //appId: "1:121798327522:web:577beffb8ff0282a7772bb"
+            };
+
+            firebase.initializeApp(firebaseConfig);
+            var push_to_firebase = function (data) {
+                alert("Thanks for sending a message. I'll try and get back to you as soon as possible.")
+                var db = firebase.firestore();
+                console.log(data);
+                db.collection("messages").add({
+                    name: data["name"],
+                    mobile: data["mobile"],
+                    location: data["location"],
+                    Language: data["Language"],
+                    Days: data["Days"]
+                });
+            }
+            var contact_submit = function () {
+                var name = document.getElementById("Name");
+                var mobile = document.getElementById("Mobile");
+                var location = document.getElementById("Location");
+                var Language = document.getElementById("Language")
+                var Days = document.getElementById("Days")
+                var data = {
+                    "name": name.value,
+                    "mobile": mobile.value,
+                    "location": location.value,
+                    "Language": Language.value,
+                    "Days": Days.value
+                }
+                var mobileRegex = /^[6-9][0-9]{9}$/;
+
+                if (!mobileRegex.test(mobile.value)) {
+                    alert("Please enter a valid 10-digit mobile number.");
+                    mobile.value = "";
+                }
+                else {
+                    push_to_firebase(data);
+                    window.location.href = "index.html"
+                }
+            }
+            document.getElementById("submit_msg").addEventListener("click", contact_submit);
+        })();
+    </script>
+</body>
+</html>
