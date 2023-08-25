@@ -117,11 +117,11 @@
                         <label title="Password">Password</label>
                     </div>
                     <div class="col-md-4 ">
-                        <input id="password" type="text" required placeholder="Password" />
+                        <input id="password" type="password" required placeholder="Password" />
                     </div>
                 </div>                
-                <div style="margin: 10px; text-align: center;">
-                    <input id="login" type="button" value="Login" border="0" class="mt-5 btn btn-info" />
+                <div style="margin-top: 5px; text-align: center;">
+                    <input id="login" type="button" value="Login" border="0" class="btn btn-info" />
 
                 </div>
             </form>
@@ -136,10 +136,9 @@
         $(document).ready(function () {
             $("#login").click(function () {
                 var username = document.getElementById("username").value;
-                var password = document.getElementById("password").value
-                // Replace these with your actual username and password
+                var password = document.getElementById("password").value                
                 var validUsername = "udayallada455@gmail.com";
-                var validPassword = "";
+                var validPassword = "Uday#455";
                 if (username == validUsername && password == validPassword) {
                     alert("login success.");
                     var db1 = firebase.firestore();
