@@ -138,8 +138,8 @@
                 var username = document.getElementById("username").value;
                 var password = document.getElementById("password").value
                 // Replace these with your actual username and password
-                var validUsername = "user";
-                var validPassword = "pass";
+                var validUsername = "udayallada455@gmail.com";
+                var validPassword = "";
                 if (username == validUsername && password == validPassword) {
                     alert("login success.");
                     var db1 = firebase.firestore();
@@ -183,17 +183,8 @@
 
 
         (function () {
-            /*'' here change ur keys*/
-            var firebaseConfig = {
-                //apiKey: "AIzaSyCh-iPnIOKAL7gaFlWhM-QZGxyPZ7wPV1o",
-                //authDomain: "loginreg-2f495.firebaseapp.com",
-                //projectId: "loginreg-2f495",
-                //storageBucket: "loginreg-2f495.appspot.com",
-                //messagingSenderId: "364827938740",
-                //appId: "1:364827938740:web:10c868fa19d04fd7f0ece1",
-                //measurementId: "G-TNV0JXWS05"
-
- 
+            
+            var firebaseConfig = { 
                 apiKey: "AIzaSyCriqnlFLoyXbiAHxqC2ZCVD8cxQbSPsfk",
                 authDomain: "volunteer-registration-9f31f.firebaseapp.com",
                 projectId: "volunteer-registration-9f31f",
@@ -236,9 +227,7 @@
                     mobile.value = "";
                 }
                 else {
-                    push_to_firebase(data);
-                   //alert("dinesh")
-                   //window.location.href = "index.html" 
+                    push_to_firebase(data);                   
                     setTimeout(() => {
                         document.location.reload();
                     }, 3000);

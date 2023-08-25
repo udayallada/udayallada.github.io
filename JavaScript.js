@@ -1,23 +1,23 @@
 ﻿
-
 $(document).ready(function () {
     $("#login").click(function () {
         var username = document.getElementById("username").value;
         var password = document.getElementById("password").value
         // Replace these with your actual username and password
-        var validUsername = "user";
-        var validPassword = "pass";
+        var validUsername = "udayallada455@gmail.com";
+        var validPassword = "Uday#455";
         if (username == validUsername && password == validPassword) {
             alert("login success.");
             var db1 = firebase.firestore();
             var dataTable = document.getElementById("dataTable");
+            
             db1.collection("messages").get().then((querySnapshot) => {
                 dataTable.innerHTML = "<tr><th>Name</th><th>Mobile Number</th><th>Location</th><th>Languages</th><th>Availablity Days</th></tr>"
                 querySnapshot.forEach((doc) => {
                     var item = doc.data();
                     var row = "<tr><td>" + item.name + "</td><td>" + item.mobile + "</td><td>" + item.location + "</td><td>" + item.Language + "</td><td>" + item.Days + "</td></tr>";
                     dataTable.innerHTML += row;
-                    console.log(item)
+                    console.log(item)                            
                 });
             });
         } else {
@@ -34,44 +34,43 @@ window.onload = function () {
     form_reg.style.display = "none";
     form_admin.style.display = "none";
 };
-function toggleContent() {
+function toggleContent() {            
     var mainform = document.getElementById("vr_admin");
     var form_reg = document.getElementById("volun_reg_form");
-    var form_admin = document.getElementById("admin");    
+    var form_admin = document.getElementById("admin");            
     if (mainform.value === "select_reg") {
         form_reg.style.display = "block";
-        form_admin.style.display = "none";
-        
-    } else {
+        form_admin.style.display = "none";                
+    } else if (mainform.value === "select_admin") {
         form_reg.style.display = "none";
-        form_admin.style.display = "block";
-        
+        form_admin.style.display = "block";                
     }
 }
+
 
 (function () {
     /*'' here change ur keys*/
     var firebaseConfig = {
-        apiKey: "AIzaSyCh-iPnIOKAL7gaFlWhM-QZGxyPZ7wPV1o",
-        authDomain: "loginreg-2f495.firebaseapp.com",
-        projectId: "loginreg-2f495",
-        storageBucket: "loginreg-2f495.appspot.com",
-        messagingSenderId: "364827938740",
-        appId: "1:364827938740:web:10c868fa19d04fd7f0ece1",
-        measurementId: "G-TNV0JXWS05"
+        //apiKey: "AIzaSyCh-iPnIOKAL7gaFlWhM-QZGxyPZ7wPV1o",
+        //authDomain: "loginreg-2f495.firebaseapp.com",
+        //projectId: "loginreg-2f495",
+        //storageBucket: "loginreg-2f495.appspot.com",
+        //messagingSenderId: "364827938740",
+        //appId: "1:364827938740:web:10c868fa19d04fd7f0ece1",
+        //measurementId: "G-TNV0JXWS05"
 
 
-        //apiKey: "AIzaSyCriqnlFLoyXbiAHxqC2ZCVD8cxQbSPsfk",
-        //authDomain: "volunteer-registration-9f31f.firebaseapp.com",
-        //projectId: "volunteer-registration-9f31f",
-        //storageBucket: "volunteer-registration-9f31f.appspot.com",
-        //messagingSenderId: "121798327522",
-        //appId: "1:121798327522:web:577beffb8ff0282a7772bb"
+        apiKey: "AIzaSyCriqnlFLoyXbiAHxqC2ZCVD8cxQbSPsfk",
+        authDomain: "volunteer-registration-9f31f.firebaseapp.com",
+        projectId: "volunteer-registration-9f31f",
+        storageBucket: "volunteer-registration-9f31f.appspot.com",
+        messagingSenderId: "121798327522",
+        appId: "1:121798327522:web:577beffb8ff0282a7772bb"
     };
 
     firebase.initializeApp(firebaseConfig);
     var push_to_firebase = function (data) {
-        alert("Thanks for sending a message. I'll try and get back to you as soon as possible.")
+        
         var db = firebase.firestore();
         console.log(data);
         db.collection("messages").add({
@@ -81,6 +80,7 @@ function toggleContent() {
             Language: data["Language"],
             Days: data["Days"]
         });
+        alert("Thanks for sending a message. I'll try and get back to you as soon as possible.");
     }
     var contact_submit = function () {
         var name = document.getElementById("Name");
@@ -103,7 +103,11 @@ function toggleContent() {
         }
         else {
             push_to_firebase(data);
-            window.location.href = "index.html"
+           //alert("dinesh")
+           //window.location.href = "index.html" 
+            setTimeout(() => {
+                document.location.reload();
+            }, 3000);
         }
     }
     document.getElementById("submit_msg").addEventListener("click", contact_submit);
