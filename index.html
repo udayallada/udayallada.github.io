@@ -163,17 +163,22 @@
             var form_reg = document.getElementById("volun_reg_form");
             var form_admin = document.getElementById("admin");
             var mainform = document.getElementById("vr_admin");
+            
             mainform.value == "";
             form_reg.style.display = "none";
             form_admin.style.display = "none";
+
         };
         function toggleContent() {            
             var mainform = document.getElementById("vr_admin");
             var form_reg = document.getElementById("volun_reg_form");
-            var form_admin = document.getElementById("admin");            
+            var form_admin = document.getElementById("admin");    
+            var dataT = document.getElementById("dataTable");
+
             if (mainform.value === "select_reg") {
                 form_reg.style.display = "block";
-                form_admin.style.display = "none";                
+                form_admin.style.display = "none"; 
+                dataT.style.display="none"               
             } else if (mainform.value === "select_admin") {
                 form_reg.style.display = "none";
                 form_admin.style.display = "block";                
